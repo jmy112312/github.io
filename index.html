@@ -1,233 +1,613 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
-    <title>Kokoa Challenge</title>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>건설 정보 시스템 - 프로젝트 현황</title>
+    <style>
+      /* 기본 스타일 초기화 및 글꼴 설정 */
+      body {
+        font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f2f5; /* 전체 배경색 */
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /* 전체 페이지를 감싸는 컨테이너 */
+      .container {
+        max-width: 1200px; /* 최대 가로 폭 */
+        margin: 0 auto; /* 가운데 정렬 */
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        min-height: 100vh; /* 최소 높이를 화면 전체로 설정 */
+      }
+
+      /* 상단 헤더 스타일 */
+      .header {
+        background-color: #ffc107; /* 노란색 배경 */
+        color: #333;
+        padding: 15px 20px;
+        display: flex; /* 가로 정렬 */
+        align-items: center; /* 세로 가운데 정렬 */
+        justify-content: space-between; /* 양 끝 정렬 */
+        font-size: 20px;
+        font-weight: bold;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .header .menu-icon {
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 15px;
+      }
+
+      .header .title {
+        flex-grow: 1; /* 남은 공간을 차지하여 제목이 가운데 오도록 */
+        text-align: center;
+      }
+
+      /* 메인 콘텐츠 영역 */
+      .main-content {
+        padding: 20px;
+      }
+
+      /* 섹션 제목 스타일 */
+      .section-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #000;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        margin-top: 40px;
+      }
+
+      .section-title:first-of-type {
+        margin-top: 0;
+      }
+
+      /* 공사 현황 섹션 */
+      .project-overview-section {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      /* 공사 현황 상단 (조감도 + 표 + 버튼) 레이아웃 */
+      .project-details-top {
+        display: grid; /* 격자(Grid) 레이아웃 사용 */
+        /* 왼쪽 열(조감도+표)과 오른쪽 열(버튼)이 각각 1fr씩, 즉 반씩 공간을 가집니다. */
+        grid-template-columns: 1fr 1fr;
+        gap: 20px; /* 열 사이의 간격 */
+        margin-bottom: 20px;
+        align-items: stretch; /* 중요: 양쪽 열의 높이를 가장 긴 내용에 맞춰 늘립니다. */
+      }
+
+      /* 조감도와 표를 담는 왼쪽 열 컨테이너 */
+      .project-left-column {
+        display: flex;
+        flex-direction: column; /* 조감도와 표를 세로로 쌓음 */
+        gap: 20px; /* 조감도와 표 사이의 간격 */
+        height: 100%; /* 부모 그리드 셀의 높이를 꽉 채웁니다. */
+      }
+
+      /* 조감도 이미지 박스 */
+      .project-image-wrapper {
+        width: 100%; /* 부모(.project-left-column)의 가로 폭을 꽉 채움 */
+        height: 180px; /* 고정 높이 */
+        overflow: hidden;
+        border: 1px solid #ccc; /* 이미지에 맞춘 테두리 */
+        border-radius: 5px; /* 이미지에 맞춘 둥근 모서리 */
+        flex-shrink: 0; /* 줄어들지 않도록 */
+        display: flex; /* 이미지 가운데 정렬을 위해 flex 사용 */
+        justify-content: center;
+        align-items: center;
+      }
+
+      .project-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* 이미지를 상자에 꽉 채우고 비율 유지 */
+        display: block;
+      }
+
+      /* 공사 현황 표 스타일 */
+      .status-table {
+        width: 100%; /* 표의 가로 폭 100% */
+        border-collapse: collapse; /* 셀(칸)의 테두리가 겹치도록 설정합니다. */
+        font-size: 14px; /* 표 안의 글자 크기를 14px로 설정합니다. */
+      }
+
+      .status-table td {
+        border: 1px solid #ccc; /* 모든 칸에 얇은 테두리를 줍니다. */
+        padding: 8px 12px; /* 칸 안의 내용과 테두리 사이에 여백을 줍니다. */
+        text-align: left; /* 글자를 왼쪽으로 정렬합니다. */
+        vertical-align: middle; /* 내용을 칸의 세로 가운데로 정렬합니다. */
+      }
+
+      .status-table .label {
+        background-color: #e0e0e0;
+        font-weight: bold;
+        width: 25%; /* 라벨 칸 너비 조정 */
+        white-space: nowrap;
+      }
+
+      .status-table .value {
+        width: 75%; /* 값 칸 너비 조정 */
+      }
+
+      /* 공정율 옆 '보기' 버튼 스타일 */
+      .view-button {
+        background-color: #6c757d; /* 회색 배경 */
+        color: white;
+        padding: 5px 10px; /* 작은 여백 */
+        border: none;
+        border-radius: 4px; /* 살짝 둥근 모서리 */
+        cursor: pointer;
+        font-size: 13px; /* 작은 글자 크기 */
+        margin-left: 10px; /* 텍스트와의 간격 */
+        white-space: nowrap; /* 글자가 줄바꿈되지 않도록 */
+        transition: background-color 0.3s ease;
+      }
+
+      .view-button:hover {
+        background-color: #5a6268;
+      }
+
+      /* 버튼 그룹 스타일 */
+      .button-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2개씩 4줄로 배치 */
+        gap: 10px; /* 버튼 간 간격 */
+        align-self: stretch; /* 중요: 그리드 셀 내에서 세로로 꽉 채웁니다. */
+        height: 100%; /* 중요: 부모 그리드 셀의 높이를 꽉 채웁니다. */
+        align-content: space-evenly; /* 중요: 버튼 행들을 세로로 균등하게 분배합니다. */
+      }
+
+      .action-button {
+        background-color: #007bff; /* 파란색 버튼 */
+        color: white;
+        padding: 20px 15px; /* 중요: 위아래 여백을 늘려 버튼 세로 크기를 키웁니다. */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        text-align: center;
+      }
+
+      .action-button:hover {
+        background-color: #0056b3;
+      }
+
+      /* 공사 개요 상세 섹션 */
+      .project-details-section {
+        margin-top: 40px;
+      }
+
+      .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+      }
+
+      .grid-item {
+        background-color: #f9f9f9;
+        border: 1px solid #eee;
+        padding: 12px 15px;
+        border-radius: 5px;
+        display: flex;
+        align-items: flex-start;
+        font-size: 14px;
+      }
+
+      .detail-number {
+        font-weight: bold;
+        color: #555;
+        margin-right: 8px;
+        white-space: nowrap;
+      }
+
+      .detail-label {
+        font-weight: bold;
+        color: #333;
+        margin-right: 5px;
+        white-space: nowrap;
+      }
+
+      .detail-value {
+        flex-grow: 1;
+        color: #666;
+      }
+
+      /* 참고 문헌 섹션 */
+      .references-section {
+        margin-top: 40px;
+      }
+
+      .reference-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        justify-content: center;
+      }
+
+      .reference-item {
+        text-align: center;
+        background-color: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      .reference-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        object-fit: contain;
+      }
+
+      .stars {
+        color: #ffc107;
+        font-size: 18px;
+        margin-top: 5px;
+      }
+
+      /* New-Technology 섹션 */
+      .new-technology-section {
+        margin-top: 40px;
+        background-color: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .new-technology-section p {
+        font-size: 15px;
+        color: #555;
+      }
+
+      /* 반응형 디자인 (모바일 최적화) */
+      @media (max-width: 768px) {
+        .header {
+          font-size: 18px;
+          padding: 10px 15px;
+        }
+
+        .main-content {
+          padding: 15px;
+        }
+
+        .section-title {
+          font-size: 20px;
+          margin-bottom: 15px;
+        }
+
+        /* 작은 화면에서는 좌우 배치를 위아래 배치로 변경합니다. */
+        .project-details-top {
+          grid-template-columns: 1fr; /* 한 줄에 하나씩 항목을 배치합니다. */
+          gap: 20px; /* 항목 사이의 간격을 유지합니다. */
+        }
+
+        .project-left-column {
+          width: 100%; /* 전체 폭 사용 */
+          align-items: center; /* 가운데 정렬 */
+          height: auto; /* 모바일에서는 높이 고정 해제 */
+        }
+
+        .project-image-wrapper {
+          width: 180px; /* 모바일에서 이미지 크기 조금 키움 */
+          height: 140px;
+          margin-bottom: 15px; /* 이미지 아래 여백 추가 */
+        }
+
+        .status-table {
+          font-size: 12px;
+        }
+
+        .status-table td {
+          padding: 6px 8px;
+        }
+
+        .status-table .label {
+          width: 30%; /* 라벨 칸 너비 조정 */
+        }
+
+        .status-table .value {
+          width: 70%; /* 값 칸 너비 조정 */
+        }
+
+        .view-button {
+          font-size: 12px; /* 모바일에서 글자 크기 조정 */
+          padding: 4px 8px;
+        }
+
+        .button-grid {
+          grid-template-columns: repeat(
+            2,
+            1fr
+          ); /* 모바일에서는 2개씩 4줄로 배치 */
+          width: 100%; /* 전체 폭 사용 */
+          max-width: 300px; /* 버튼 그리드 최대 폭 제한 */
+          margin: 0 auto; /* 가운데 정렬 */
+          height: auto; /* 모바일에서는 높이 고정 해제 */
+          align-content: start; /* 모바일에서는 버튼을 위에서부터 정렬 */
+        }
+
+        .action-button {
+          padding: 10px 12px;
+          font-size: 14px;
+        }
+
+        .details-grid {
+          grid-template-columns: 1fr; /* 한 줄에 하나씩 */
+        }
+
+        .grid-item {
+          font-size: 13px;
+        }
+
+        .reference-grid {
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        }
+
+        .new-technology-section p {
+          font-size: 14px;
+        }
+      }
+
+      /* 아이폰 16 (약 390px ~ 430px)과 같은 아주 작은 화면에 최적화 */
+      @media (max-width: 430px) {
+        .header {
+          font-size: 16px;
+          padding: 10px;
+        }
+
+        .main-content {
+          padding: 10px;
+        }
+
+        .section-title {
+          font-size: 18px;
+          margin-bottom: 10px;
+        }
+
+        .project-image-wrapper {
+          width: 150px; /* 더 작은 화면에서는 이미지 크기 다시 줄임 */
+          height: 110px;
+        }
+
+        .status-table {
+          font-size: 11px;
+        }
+
+        .status-table td {
+          padding: 5px 6px;
+        }
+
+        .status-table .label {
+          width: 35%; /* 라벨 칸 너비 더 넓게 */
+        }
+
+        .status-table .value {
+          width: 65%; /* 값 칸 너비 조절 */
+        }
+
+        .view-button {
+          font-size: 11px; /* 아주 작은 화면에서 글자 크기 더 조정 */
+          padding: 3px 6px;
+        }
+
+        .button-grid {
+          grid-template-columns: 1fr; /* 버튼을 세로로 한 줄에 하나씩 */
+          max-width: 200px; /* 버튼 그리드 최대 폭 제한 */
+        }
+
+        .action-button {
+          padding: 8px 10px;
+          font-size: 13px;
+        }
+
+        .grid-item {
+          font-size: 12px;
+          padding: 10px;
+        }
+
+        .reference-grid {
+          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        }
+      }
+    </style>
   </head>
   <body>
-    <!-- ❌ DON'T DELETE THIS OR WORRY ABOUT THIS 👇🏻 ❌ -->
-    <script
-      src="https://kit.fontawesome.com/b5ac015c11.js"
-      crossorigin="anonymous"
-    ></script>
     <div class="container">
-      <div class="title">
-        <i class="fa-solid fa-bars"></i>
-        <div>건설정보시스템</div>
-      </div>
-      <div class="site-name">
-        <div class="site-name__title-box">공사현황</div>
-        <div class="site-name__bottom-box">
-          <img src="air_view.jpg" class="site-name__bottom-box__img-box" />
-          <div class="site-name__bottom-box__right-box">
-            <div class="site-name__bottom-box__right-box__title">00현장</div>
-            <div class="site-name__bottom-box__right-box__Construction-period">
-              공사기간:2025.00.00 ~ 2027.00.00
-            </div>
-            <div class="site-name__bottom-box__right-box__progress-rate">
-              공정률:50%
-            </div>
-            <div class="site-name__bottom-box__right-box__today-progress">
-              <div>공사일보</div>
-              <div>회의록</div>
-            </div>
-            <div class="site-name__bottom-box__right-box__button">
-              <div class="site-name__bottom-box__right-box__button__todaywork">
-                Memo
+      <header class="header">
+        <div class="menu-icon">&#9776;</div>
+        <div class="title">건설 정보 시스템</div>
+        <div></div>
+      </header>
+
+      <div class="main-content">
+        <section class="project-overview-section">
+          <h2 class="section-title">공사 현황</h2>
+          <div class="project-details-top">
+            <div class="project-left-column">
+              <div class="project-image-wrapper">
+                <img
+                  src="image_87cd93.jpg"
+                  alt="프로젝트 조감도"
+                  class="project-image"
+                />
               </div>
-              <div class="site-name__bottom-box__right-box__button__todaywork">
-                Today-check
+              <div class="project-info">
+                <table class="status-table">
+                  <tbody>
+                    <tr>
+                      <td class="label">공 사 명</td>
+                      <td class="value" colspan="2">대구범어 복합 신축공사</td>
+                    </tr>
+                    <tr>
+                      <td class="label">위 치</td>
+                      <td class="value" colspan="2">
+                        대구광역시 수성구 범어동 551-7번지 외 10필지
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="label">공사기간</td>
+                      <td class="value" colspan="2">
+                        2018.04.01 ~ 2020.09.28 (30개월)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="label">발 주 처<br />/위 탁 사</td>
+                      <td class="value" colspan="2">
+                        하나자산신탁㈜ / ㈜새빛이엔씨
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="label">설 계</td>
+                      <td class="value" colspan="2">㈜건축사사무소 환경A&C</td>
+                    </tr>
+                    <tr>
+                      <td class="label">감 리</td>
+                      <td class="value" colspan="2">㈜건축사사무소 테마공간</td>
+                    </tr>
+                    <tr>
+                      <td class="label">공정표 / 공정율</td>
+                      <td class="value" colspan="2">
+                        00%
+                        <button class="view-button">공정표 보기</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="bibliography">
-        <div class="bibliography__title">참고문헌</div>
-        <div class="bibliography__books">
-          <div class="book-item">
-            <img src="guide.jpg" alt="guide" />
-            <div class="stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
+
+            <div class="button-grid">
+              <button class="action-button">공사일보</button>
+              <button class="action-button">자재승인원</button>
+              <button class="action-button">자재검수</button>
+              <button class="action-button">검측요청서</button>
+              <button class="action-button">작업지시서</button>
+              <button class="action-button">회의록</button>
+              <button class="action-button">사진촬영</button>
+              <button class="action-button">Check-list</button>
+              <button class="action-button">도면</button>
+              <button class="action-button">시방서</button>
             </div>
           </div>
-          <div class="book-item">
-            <img src="LH.png" alt="LH" />
-            <div class="stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
+        </section>
+
+        <section class="project-details-section">
+          <h2 class="section-title">공사 개요 상세</h2>
+          <div class="details-grid">
+            <div class="grid-item">
+              <span class="detail-number">1.</span>
+              <span class="detail-label">대지면적 :</span>
+              <span class="detail-value">2,139.00㎡ [ 647.04평 ]</span>
+            </div>
+            <div class="grid-item">
+              <span class="detail-number">2.</span>
+              <span class="detail-label">건축면적 :</span>
+              <span class="detail-value">1,654.49㎡ [ 500.48평 ]</span>
+            </div>
+            <div class="grid-item">
+              <span class="detail-number">3.</span>
+              <span class="detail-label">연 면 적 :</span>
+              <span class="detail-value">30,604.49㎡ [ 9,257.85평 ]</span>
+            </div>
+            <div class="grid-item">
+              <span class="detail-number">4.</span>
+              <span class="detail-label">규 모 :</span>
+              <span class="detail-value"
+                >지하4층 / 지상24층, 최고높이 93.70M</span
+              >
+            </div>
+            <div class="grid-item">
+              <span class="detail-number">5.</span>
+              <span class="detail-label">구 조 :</span>
+              <span class="detail-value">철골철근콘크리트구조</span>
+            </div>
+            <div class="grid-item">
+              <span class="detail-number">6.</span>
+              <span class="detail-label">용 도 :</span>
+              <span class="detail-value"
+                >도생(99세대), 오피스텔(240실), 근생(53실) 총 392실</span
+              >
+            </div>
+            <div class="grid-item">
+              <span class="detail-number">7.</span>
+              <span class="detail-label">주차 대수 :</span>
+              <span class="detail-value">총 307대</span>
             </div>
           </div>
-          <div class="book-item">
-            <img src="regulations1.jpg" alt="regulations1v" />
-            <div class="stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
+        </section>
+
+        <section class="references-section">
+          <h2 class="section-title">참고 문헌</h2>
+          <div class="reference-grid">
+            <div class="reference-item">
+              <img
+                src="https://placehold.co/150x200/cccccc/333333?text=Book+1"
+                alt="건축 기술 지침"
+              />
+              <p>건축 기술 지침</p>
+              <div class="stars">★★★★★</div>
+            </div>
+            <div class="reference-item">
+              <img
+                src="https://placehold.co/150x200/cccccc/333333?text=Book+2"
+                alt="건축사 사무소"
+              />
+              <p>건축사 사무소</p>
+              <div class="stars">★★★★☆</div>
+            </div>
+            <div class="reference-item">
+              <img
+                src="https://placehold.co/150x200/cccccc/333333?text=Book+3"
+                alt="하도급법 해설"
+              />
+              <p>하도급법 해설과 쟁점</p>
+              <div class="stars">★★★★★</div>
+            </div>
+            <div class="reference-item">
+              <img
+                src="https://placehold.co/150x200/cccccc/333333?text=Book+4"
+                alt="건축 제법규 해설"
+              />
+              <p>건축 제법규 해설</p>
+              <div class="stars">★★★★☆</div>
             </div>
           </div>
-          <div class="book-item">
-            <img src="regulations.jpg" alt="regulations" />
-            <div class="stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="new-technology">
-        <div class="new-technology__title">New-Technology</div>
-        <div class="new-technology">
-          <div class="new-technology-info">
-            <div class="new-technology-name">
-              볼트풀림이 없는 클립 체결식 연결구를 이용한 무용접 PHC말뚝 이음
-              공법
-            </div>
-            <div class="new-technology-description">
-              이 신기술은 상부말뚝 단부에 상부수직볼트로 연결판을 고정하고
-              하부말뚝 단부에 하부수직볼트 만 체결하여 두 말뚝을 축조정 및 결합
-              후, 연결판 측면의 클립체결홈에 클립(U형핀)을 삽입하 고 수평으로
-              타격하면 클립이 하부수직볼트 헤드 하면과 맞물리면서 두 말뚝의
-              이음이 완료되고, 이때 상·하볼트헤드 연단과 반대편 말뚝의 연단은
-              상호 밀착되어 볼트풀림을 차단할 수 있는 PHC말뚝 기계식 이음
-              공법이다.
-            </div>
-          </div>
-        </div>
+        </section>
+
+        <section class="new-technology-section">
+          <h2 class="section-title">New-Technology</h2>
+          <p>
+            볼트풀림이 없는 클립 체결식 연결구를 이용한 무용접 PHC 말뚝 이음
+            공법
+          </p>
+          <p>
+            이 신기술은 상부 말뚝 단부에 상부 수직 볼트로 연결판을 고정하고 하부
+            말뚝 단부에 하부 수직볼트만 체결하여 두 말뚝을 축조정 및 결합 후,
+            연결판 측면의 클립 체결홈에 클립(U형 핀)을 삽입하고 수평으로
+            타격하면 클립이 하부 수직볼트 헤드 하면과 맞물리면서 두 말뚝의
+            이음이 완료되고, 이때 상·하 볼트 헤드 연단과 반대편 말뚝의 연단은
+            상호 밀착되어 볼트풀림을 차단할 수 있는 PHC 말뚝 기계식 이음
+            공법이다.
+          </p>
+        </section>
       </div>
     </div>
   </body>
 </html>
-`
-=======
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Kokoa Challenge</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <!-- ❌ DON'T DELETE THIS OR WORRY ABOUT THIS 👇🏻 ❌ -->
-    <script
-      src="https://kit.fontawesome.com/b5ac015c11.js"
-      crossorigin="anonymous"
-    ></script>
-    <div class="container">
-      <div class="title">
-        <i class="fa-solid fa-bars"></i>
-        <div>건설정보시스템</div>
-      </div>
-      <div class="site-name">
-        <div class="site-name__title-box">공사현황</div>
-        <div class="site-name__bottom-box">
-          <img src="air_view.jpg" class="site-name__bottom-box__img-box" />
-          <div class="site-name__bottom-box__right-box">
-            <div class="site-name__bottom-box__right-box__title">00현장</div>
-            <div class="site-name__bottom-box__right-box__Construction-period">
-              공사기간:2025.00.00 ~ 2027.00.00
-            </div>
-            <div class="site-name__bottom-box__right-box__progress-rate">
-              공정률:50%
-            </div>
-            <div class="site-name__bottom-box__right-box__today-progress">
-              <div>공사일보</div>
-              <div>회의록</div>
-            </div>
-            <div class="site-name__bottom-box__right-box__button">
-              <div class="site-name__bottom-box__right-box__button__todaywork">
-                Memo
-              </div>
-              <div class="site-name__bottom-box__right-box__button__todaywork">
-                Today-check
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="bibliography">
-        <div class="bibliography__title">참고문헌</div>
-        <div class="bibliography__books">
-          <div class="book-item">
-            <img src="guide.jpg" alt="guide" />
-            <div class="stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-            </div>
-          </div>
-          <div class="book-item">
-            <img src="LH.png" alt="LH" />
-            <div class="stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-            </div>
-          </div>
-          <div class="book-item">
-            <img src="regulations1.jpg" alt="regulations1v" />
-            <div class="stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-            </div>
-          </div>
-          <div class="book-item">
-            <img src="regulations.jpg" alt="regulations" />
-            <div class="stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="new-technology">
-        <div class="new-technology__title">New-Technology</div>
-        <div class="new-technology">
-          <div class="new-technology-info">
-            <div class="new-technology-name">
-              볼트풀림이 없는 클립 체결식 연결구를 이용한 무용접 PHC말뚝 이음
-              공법
-            </div>
-            <div class="new-technology-description">
-              이 신기술은 상부말뚝 단부에 상부수직볼트로 연결판을 고정하고
-              하부말뚝 단부에 하부수직볼트 만 체결하여 두 말뚝을 축조정 및 결합
-              후, 연결판 측면의 클립체결홈에 클립(U형핀)을 삽입하 고 수평으로
-              타격하면 클립이 하부수직볼트 헤드 하면과 맞물리면서 두 말뚝의
-              이음이 완료되고, 이때 상·하볼트헤드 연단과 반대편 말뚝의 연단은
-              상호 밀착되어 볼트풀림을 차단할 수 있는 PHC말뚝 기계식 이음
-              공법이다.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
-</html>
-`
->>>>>>> 36d97a01e8f96ee6c7122680ebc5036cef9115df
